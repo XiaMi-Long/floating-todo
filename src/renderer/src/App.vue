@@ -26,6 +26,16 @@ const canClearCompleted = computed(() => completedCount.value > 0)
 let removeTodosChangedListener: (() => void) | undefined
 
 /**
+ * 同步当前窗口类型。
+ * @changeLog
+ * - Created
+ * @returns 无返回值
+ */
+function syncWindowMode(): void {
+  isWidget.value = window.location.hash.includes('widget')
+}
+
+/**
  * 加载本地任务列表。
  * @changeLog
  * - Created
@@ -203,13 +213,12 @@ onMounted(() => {
     todos.value = nextTodos
   })
 
-  window.addEventListener('hashchange', () => {
-    isWidget.value = window.location.hash.includes('widget')
-  })
+  window.addEventListener('hashchange', syncWindowMode)
 })
 
 onUnmounted(() => {
   removeTodosChangedListener?.()
+  window.removeEventListener('hashchange', syncWindowMode)
 })
 </script>
 
