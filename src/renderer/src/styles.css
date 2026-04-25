@@ -1,0 +1,487 @@
+:root {
+  color: #263126;
+  background: transparent;
+  font-family:
+    "LXGW WenKai",
+    "Microsoft YaHei UI",
+    "Source Han Sans SC",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #263126;
+  --muted: #667061;
+  --paper: #fffaf0;
+  --paper-deep: #f6f0e5;
+  --sage: #9faf8d;
+  --sage-dark: #586c4c;
+  --sun: #e5a844;
+  --clay: #d8754f;
+  --line: rgba(38, 49, 38, 0.12);
+  --shadow: 0 24px 70px rgba(61, 71, 51, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(229, 168, 68, 0.28), transparent 30%),
+    linear-gradient(135deg, #f6f0e5 0%, #eef0df 48%, #d8e1c9 100%);
+  animation: app-reveal 420ms ease-out both;
+}
+
+.hero-card,
+.composer-card,
+.task-panel {
+  border: 1px solid var(--line);
+  background: rgba(255, 250, 240, 0.86);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.hero-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 188px;
+  padding: 34px;
+  border-radius: 34px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  right: -70px;
+  top: -90px;
+  width: 230px;
+  height: 230px;
+  border-radius: 999px;
+  background: rgba(159, 175, 141, 0.36);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--sage-dark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.08;
+}
+
+h1 {
+  font-size: clamp(42px, 7vw, 74px);
+  letter-spacing: -0.06em;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+.hero-copy {
+  max-width: 520px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.start-button {
+  position: relative;
+  z-index: 1;
+  min-width: 132px;
+  min-height: 132px;
+  border: 0;
+  border-radius: 999px;
+  color: #fffaf0;
+  background: linear-gradient(135deg, #314333, #6f855d);
+  box-shadow: 0 22px 44px rgba(49, 67, 51, 0.28);
+  font-size: 28px;
+  font-weight: 800;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.start-button:hover {
+  transform: translateY(-3px) rotate(-2deg);
+  box-shadow: 0 28px 56px rgba(49, 67, 51, 0.34);
+}
+
+.composer-card {
+  display: grid;
+  grid-template-columns: 1fr 150px 128px;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 14px;
+  border-radius: 24px;
+}
+
+.composer-card input,
+.composer-card select,
+.composer-card button {
+  min-height: 54px;
+  border-radius: 17px;
+  border: 1px solid transparent;
+}
+
+.composer-card input,
+.composer-card select {
+  width: 100%;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.74);
+  outline: none;
+  padding: 0 16px;
+}
+
+.composer-card input:focus,
+.composer-card select:focus {
+  border-color: rgba(88, 108, 76, 0.45);
+  box-shadow: 0 0 0 4px rgba(159, 175, 141, 0.22);
+}
+
+.composer-card button,
+.ghost-button {
+  border: 0;
+  color: #fffaf0;
+  background: var(--sage-dark);
+  font-weight: 800;
+}
+
+.error-message {
+  margin: 14px 8px 0;
+  color: #9b3e25;
+  font-weight: 700;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.task-panel {
+  min-height: 330px;
+  padding: 22px;
+  border-radius: 30px;
+}
+
+.muted-panel {
+  background: rgba(255, 250, 240, 0.62);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.task-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.task-item {
+  display: grid;
+  grid-template-columns: 34px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 12px;
+  border: 1px solid rgba(38, 49, 38, 0.09);
+  border-radius: 21px;
+  background: rgba(255, 255, 255, 0.66);
+  animation: task-rise 260ms ease-out both;
+}
+
+.task-item.completed {
+  grid-template-columns: 34px 1fr auto;
+  color: rgba(38, 49, 38, 0.58);
+}
+
+.task-content {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.task-content strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-content span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.check-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 2px solid rgba(88, 108, 76, 0.35);
+  background: #fffaf0;
+  color: #fffaf0;
+  font-weight: 900;
+}
+
+.check-button.checked {
+  border-color: var(--sage-dark);
+  background: var(--sage-dark);
+}
+
+.priority-badge {
+  min-width: 34px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #fffaf0;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.priority-high {
+  background: var(--clay);
+}
+
+.priority-medium {
+  background: var(--sun);
+}
+
+.priority-low {
+  background: var(--sage);
+}
+
+.ghost-button {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(88, 108, 76, 0.14);
+  color: var(--sage-dark);
+}
+
+.empty-card {
+  display: grid;
+  gap: 8px;
+  padding: 22px;
+  border: 1px dashed rgba(88, 108, 76, 0.28);
+  border-radius: 22px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.empty-card strong {
+  color: var(--ink);
+}
+
+.widget-shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(229, 168, 68, 0.3), transparent 34%),
+    linear-gradient(155deg, rgba(255, 250, 240, 0.95), rgba(221, 230, 207, 0.94));
+  box-shadow: 0 18px 46px rgba(38, 49, 38, 0.25);
+  animation: widget-pop 260ms ease-out both;
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.widget-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 18px 12px;
+}
+
+.widget-header h1 {
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--sage-dark);
+  background: rgba(255, 255, 255, 0.62);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.widget-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 0;
+  padding: 8px 14px 16px;
+  overflow: auto;
+}
+
+.widget-todo {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid rgba(38, 49, 38, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--ink);
+  text-align: left;
+  animation: task-rise 260ms ease-out both;
+}
+
+.priority-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.widget-todo-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.widget-check {
+  color: var(--sage-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+@keyframes app-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes widget-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes task-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 780px) {
+  .app-shell {
+    padding: 18px;
+  }
+
+  .hero-card,
+  .composer-card,
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .start-button {
+    min-width: 108px;
+    min-height: 108px;
+  }
+
+  .task-item {
+    grid-template-columns: 34px 1fr auto;
+  }
+
+  .task-item .ghost-button {
+    grid-column: 2 / -1;
+    justify-self: start;
+  }
+}

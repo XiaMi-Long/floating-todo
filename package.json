@@ -1,0 +1,60 @@
+{
+  "name": "floating-todo",
+  "version": "0.1.0",
+  "description": "A floating desktop todo widget built with Electron, Vue, and TypeScript.",
+  "main": "out/main/index.js",
+  "author": "XiaMi-Long",
+  "homepage": "https://github.com/XiaMi-Long/floating-todo",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "typecheck": "vue-tsc --noEmit",
+    "build": "npm run typecheck && electron-vite build",
+    "build:win": "npm run build && electron-builder --win --x64",
+    "preview": "electron-vite preview",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "vue": "^3.5.33"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.15.30",
+    "@types/node": "^25.6.0",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "electron": "^41.3.0",
+    "electron-builder": "^26.8.1",
+    "electron-vite": "^5.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^7.3.2",
+    "vue-tsc": "^3.2.7"
+  },
+  "build": {
+    "appId": "com.xiamilong.floatingtodo",
+    "productName": "Floating Todo",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "resources/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Floating Todo"
+    }
+  }
+}
