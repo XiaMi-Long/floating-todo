@@ -4,6 +4,7 @@ import { dirname } from 'node:path'
 import type { AddTodoPayload, TodoItem, UpdateTodoPayload } from '@shared/todo'
 import { isTodoPriority } from '@shared/todo'
 
+// 任务标题最大字符数
 const MAX_TITLE_LENGTH = 120
 
 /**
@@ -40,6 +41,7 @@ export class TodoStore {
   addTodo(payload: AddTodoPayload): TodoItem {
     const title = normalizeTitle(payload.title)
 
+    // 标题为空时拒绝创建
     if (!title) {
       throw new Error('任务内容不能为空')
     }
@@ -47,11 +49,13 @@ export class TodoStore {
     const todo: TodoItem = {
       id: randomUUID(),
       title,
+      // 非法优先级自动回退为 medium
       priority: isTodoPriority(payload.priority) ? payload.priority : 'medium',
       completed: false,
       createdAt: new Date().toISOString()
     }
 
+    // 新任务插入到列表最前
     this.todos = [todo, ...this.todos]
     this.saveTodos()
 
@@ -70,11 +74,13 @@ export class TodoStore {
     let found = false
 
     this.todos = this.todos.map((todo) => {
+      // 非目标任务原样返回
       if (todo.id !== id) return todo
 
       found = true
       const nextTodo: TodoItem = { ...todo }
 
+      // 更新标题（如果提供）
       if (typeof patch.title === 'string') {
         const title = normalizeTitle(patch.title)
 
@@ -85,13 +91,16 @@ export class TodoStore {
         nextTodo.title = title
       }
 
+      // 更新优先级（如果合法）
       if (isTodoPriority(patch.priority)) {
         nextTodo.priority = patch.priority
       }
 
+      // 切换完成状态
       if (typeof patch.completed === 'boolean' && patch.completed !== todo.completed) {
         nextTodo.completed = patch.completed
 
+        // 标记完成时记录时间，取消完成时清除时间戳
         if (patch.completed) {
           nextTodo.completedAt = new Date().toISOString()
         } else {
@@ -145,20 +154,25 @@ export class TodoStore {
    * @returns 可用任务列表
    */
   private readTodos(): TodoItem[] {
+    // 文件不存在时返回空列表
     if (!existsSync(this.filePath)) return []
 
     try {
       const fileContent = readFileSync(this.filePath, 'utf-8')
       const parsedData: unknown = JSON.parse(fileContent)
 
+      // 数据格式不正确时返回空列表
       if (!Array.isArray(parsedData)) return []
 
+      // 过滤并规范化历史数据
       return parsedData.filter(isStoredTodo).map((todo) => ({
         ...todo,
         title: normalizeTitle(todo.title),
+        // 非法优先级回退为 medium
         priority: isTodoPriority(todo.priority) ? todo.priority : 'medium'
       }))
     } catch {
+      // JSON 解析失败时返回空列表
       return []
     }
   }

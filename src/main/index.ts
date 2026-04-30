@@ -3,8 +3,11 @@ import { join } from 'node:path'
 import type { AddTodoPayload, UpdateTodoPayload } from '@shared/todo'
 import { TodoStore } from './todo-store'
 
+// 主应用窗口实例
 let mainWindow: BrowserWindow | null = null
+// 置顶悬浮窗实例
 let widgetWindow: BrowserWindow | null = null
+// 任务数据仓库实例（在 app.whenReady 中初始化）
 let todoStore: TodoStore | null = null
 
 /**
@@ -26,12 +29,14 @@ function getPreloadPath(): string {
  * @returns 无返回值
  */
 function loadRenderer(window: BrowserWindow, hash = 'main'): void {
+  // 开发环境使用 Vite dev server URL
   if (process.env.ELECTRON_RENDERER_URL) {
     window.loadURL(`${process.env.ELECTRON_RENDERER_URL}#${hash}`)
 
     return
   }
 
+  // 生产环境加载打包后的静态文件
   window.loadFile(join(__dirname, '../renderer/index.html'), { hash })
 }
 
@@ -49,7 +54,7 @@ function createMainWindow(): BrowserWindow {
     minHeight: 420,
     title: 'Floating Todo',
     autoHideMenuBar: true,
-    backgroundColor: '#f6f0e5',
+    backgroundColor: '#f2f2f7',
     webPreferences: {
       preload: getPreloadPath(),
       contextIsolation: true,
@@ -74,6 +79,7 @@ function createMainWindow(): BrowserWindow {
  * @returns 悬浮窗口实例
  */
 function createWidgetWindow(): BrowserWindow {
+  // 如果悬浮窗已存在且未销毁，直接复用
   if (widgetWindow && !widgetWindow.isDestroyed()) {
     widgetWindow.show()
     widgetWindow.focus()
@@ -187,12 +193,14 @@ function registerIpcHandlers(): void {
   ipcMain.handle('window:startWidget', () => {
     createWidgetWindow()
 
+    // 悬浮窗打开后最小化主窗口
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.minimize()
     }
   })
 
   ipcMain.handle('window:closeCurrent', (event) => {
+    // 根据发送 IPC 的 webContents 定位到对应窗口并关闭
     const window = BrowserWindow.fromWebContents(event.sender)
 
     window?.close()

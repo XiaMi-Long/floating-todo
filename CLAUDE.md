@@ -69,7 +69,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
-使用中文回复
+一定要使用中文回复
 绝对不能执行 npm-lint，不能随便删除 git 的更改文件
 不许在没有经过我的允许下，执行 npm/pnpm/yarn 的 build，lint 命令
 

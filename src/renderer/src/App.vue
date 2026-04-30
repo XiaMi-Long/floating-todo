@@ -2,27 +2,38 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import type { TodoItem, TodoPriority } from '@shared/todo'
 
+// 优先级元数据映射：中文标签 + 排序权重
 const PRIORITY_META: Record<TodoPriority, { label: string; weight: number }> = {
   high: { label: '高', weight: 3 },
   medium: { label: '中', weight: 2 },
   low: { label: '低', weight: 1 }
 }
 
+// 完整任务列表
 const todos = ref<TodoItem[]>([])
+// 新增任务输入框绑定
 const newTitle = ref('')
+// 新增任务默认优先级
 const selectedPriority = ref<TodoPriority>('medium')
+// 全局错误消息
 const errorMessage = ref('')
+// 当前是否处于悬浮窗模式（通过 URL hash 判断）
 const isWidget = ref(window.location.hash.includes('widget'))
 
+// 未完成任务列表（按优先级 + 创建时间排序）
 const activeTodos = computed(() => sortTodos(todos.value.filter((todo) => !todo.completed)))
+// 已完成任务列表（按完成时间倒序）
 const completedTodos = computed(() =>
   todos.value
     .filter((todo) => todo.completed)
     .sort((left, right) => Date.parse(right.completedAt ?? right.createdAt) - Date.parse(left.completedAt ?? left.createdAt))
 )
+// 已完成任务数量
 const completedCount = computed(() => completedTodos.value.length)
+// 是否有已完成任务可清空
 const canClearCompleted = computed(() => completedCount.value > 0)
 
+// IPC 任务变更监听器的取消函数
 let removeTodosChangedListener: (() => void) | undefined
 
 /**
@@ -54,6 +65,7 @@ async function loadTodos(): Promise<void> {
 async function addTodo(): Promise<void> {
   const title = newTitle.value.trim()
 
+  // 空输入拦截
   if (!title) {
     errorMessage.value = '先写下一个任务吧'
 
@@ -66,6 +78,7 @@ async function addTodo(): Promise<void> {
       priority: selectedPriority.value
     })
 
+    // 成功后重置表单并刷新列表
     newTitle.value = ''
     selectedPriority.value = 'medium'
     errorMessage.value = ''
@@ -206,6 +219,7 @@ function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '操作失败，请稍后再试'
 }
 
+// 组件挂载：加载数据 + 注册 IPC 变更监听 + 监听 hash 切换
 onMounted(() => {
   loadTodos()
 
@@ -216,6 +230,7 @@ onMounted(() => {
   window.addEventListener('hashchange', syncWindowMode)
 })
 
+// 组件卸载：取消 IPC 监听 + 移除 hash 事件
 onUnmounted(() => {
   removeTodosChangedListener?.()
   window.removeEventListener('hashchange', syncWindowMode)
@@ -223,6 +238,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+<!-- ===== 悬浮窗视图 ===== -->
   <section
     v-if="isWidget"
     class="widget-shell"
@@ -265,10 +281,12 @@ onUnmounted(() => {
     </main>
   </section>
 
+<!-- ===== 主窗口视图 ===== -->
   <main
     v-else
     class="app-shell"
   >
+    <!-- 顶栏：标题 + 启动悬浮窗按钮 -->
     <header class="top-bar">
       <span class="top-bar-title">Floating Todo</span>
       <button
@@ -280,6 +298,7 @@ onUnmounted(() => {
       </button>
     </header>
 
+    <!-- 任务输入表单 -->
     <form
       class="composer-card"
       @submit.prevent="addTodo"
@@ -323,7 +342,9 @@ onUnmounted(() => {
       {{ errorMessage }}
     </p>
 
+    <!-- 双栏任务面板 -->
     <section class="dashboard-grid">
+      <!-- 未完成任务栏 -->
       <section class="task-panel">
         <header class="panel-header">
           <div>
@@ -376,6 +397,7 @@ onUnmounted(() => {
         </ul>
       </section>
 
+      <!-- 已完成任务栏 -->
       <section class="task-panel muted-panel">
         <header class="panel-header">
           <div>
