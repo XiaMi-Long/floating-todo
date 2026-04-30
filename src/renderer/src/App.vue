@@ -269,21 +269,16 @@ onUnmounted(() => {
     v-else
     class="app-shell"
   >
-    <section class="hero-card">
-      <div>
-        <p class="eyebrow">桌面悬浮任务清单</p>
-        <h1>Floating Todo</h1>
-        <p class="hero-copy">把最重要的未完成任务悬浮在桌面上，随时看见，随手完成。</p>
-      </div>
-
+    <header class="top-bar">
+      <span class="top-bar-title">Floating Todo</span>
       <button
-        class="start-button"
+        class="launch-button"
         type="button"
         @click="startWidget"
       >
-        Start
+        启动悬浮窗
       </button>
-    </section>
+    </header>
 
     <form
       class="composer-card"
@@ -342,7 +337,7 @@ onUnmounted(() => {
           class="empty-card"
         >
           <strong>没有待办任务</strong>
-          <span>添加一个任务，再点击 Start 打开悬浮窗。</span>
+          <span>添加一个任务，再点击「启动悬浮窗」打开悬浮窗。</span>
         </article>
 
         <ul

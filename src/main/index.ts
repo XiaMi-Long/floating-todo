@@ -43,10 +43,10 @@ function loadRenderer(window: BrowserWindow, hash = 'main'): void {
  */
 function createMainWindow(): BrowserWindow {
   mainWindow = new BrowserWindow({
-    width: 980,
-    height: 680,
-    minWidth: 760,
-    minHeight: 560,
+    width: 740,
+    height: 520,
+    minWidth: 560,
+    minHeight: 420,
     title: 'Floating Todo',
     autoHideMenuBar: true,
     backgroundColor: '#f6f0e5',
@@ -82,10 +82,10 @@ function createWidgetWindow(): BrowserWindow {
   }
 
   widgetWindow = new BrowserWindow({
-    width: 360,
-    height: 480,
-    minWidth: 320,
-    minHeight: 360,
+    width: 300,
+    height: 400,
+    minWidth: 260,
+    minHeight: 300,
     title: 'Floating Todo Widget',
     frame: false,
     transparent: true,
